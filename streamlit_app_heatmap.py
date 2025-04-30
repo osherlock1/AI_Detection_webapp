@@ -13,7 +13,7 @@ MODEL_ID = "openai/clip-vit-base-patch32"
 PEFT_MODEL_PATH = 'final_model/'
 
 
-
+GITHUB_EXAMPLES_URL = "https://drive.google.com/drive/u/2/folders/1oj2tbDBZ28SjJK1IZvAygkaOkw7O2yvl" 
 
 AI_IMAGE_ARTIFACTS = [
     "a photo with distorted fingers or too many fingers",
@@ -117,9 +117,18 @@ def visualize_attention(image, attentions, processor, layer_index=-1, head_index
 APP_SCRIPT_NAME = "streamlit_app.py" 
 
 st.title("🖼️ AI vs Real Image Detector")
+
 st.markdown(
-    "Upload an image, and the model will predict whether it was AI-generated or a real photograph. "
+    "Upload an image to predict whether it's AI-generated or real, "
+    "get reasoning based on CLIP characteristics, and visualize attention."
 )
+
+# --- Link to Example Images 
+st.markdown(f"""
+You can find some AI-generated and Real images to test in this
+[Google Drive Folder]({GITHUB_EXAMPLES_URL}).
+""")
+st.write("---")
 
 
 uploaded_file = st.file_uploader("📁 Choose an image...", type=["jpg", "jpeg", "png"])
@@ -158,7 +167,7 @@ if uploaded_file is not None:
             else:
                 is_ai_generated = False
                 prediction_text = "**Real Photograph**"
-            st.success(f"✅ Prediction: {prediction_text} (Confidence: {prob.item():.2f})")
+            st.success(f"✅ Prediction: {prediction_text} (Chance the Image is AI Generated: {prob.item() * 100 :.2f})%")
             classification_successful = True 
             
         except Exception as e:
